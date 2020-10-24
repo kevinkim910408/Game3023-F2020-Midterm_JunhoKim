@@ -22,6 +22,23 @@ public class Inventory : MonoBehaviour, ISaveHandler
     [SerializeField]
     private List<Item> startingItems;
 
+    // for crafting
+    [Header("Crafting")]
+    [SerializeField]
+    private GameObject craftingPanel;
+
+    [SerializeField]
+    private List<ItemSlot> craftingItemSlots;
+
+    // for results
+    // for crafting
+    [Header("Result")]
+    [SerializeField]
+    private GameObject resultPanel;
+
+    [SerializeField]
+    private List<ItemSlot> resultItemSlots;
+
     /// <summary>
     /// Private key used for saving with playerprefs
     /// </summary>
@@ -36,7 +53,7 @@ public class Inventory : MonoBehaviour, ISaveHandler
         // init starting items for testing
         for (int i = 0; i < startingItems.Count && i < itemSlots.Count; i++)
         {
-            itemSlots[i].SetContents(startingItems[i], 16);
+            itemSlots[i].SetContents(startingItems[i], 1);
         }
     }
 
@@ -57,6 +74,33 @@ public class Inventory : MonoBehaviour, ISaveHandler
         {
             item.onItemUse.AddListener(OnItemUsed);
         }
+
+        // init crafting item slots
+        for (int i = 1; i < craftingItemSlots.Count; i++)
+        {
+            GameObject newObject = Instantiate(craftingItemSlots[0].gameObject, craftingPanel.transform);
+            ItemSlot newSlot = newObject.GetComponent<ItemSlot>();
+            craftingItemSlots[i] = newSlot;
+        }
+
+        foreach (ItemSlot item in craftingItemSlots)
+        {
+            item.onItemUse.AddListener(OnItemUsed);
+        }
+
+        // init result item slots
+        for (int i = 1; i < resultItemSlots.Count; i++)
+        {
+            GameObject newObject = Instantiate(resultItemSlots[0].gameObject, resultPanel.transform);
+            ItemSlot newSlot = newObject.GetComponent<ItemSlot>();
+            resultItemSlots[i] = newSlot;
+        }
+
+        foreach (ItemSlot item in resultItemSlots)
+        {
+            item.onItemUse.AddListener(OnItemUsed);
+        }
+
     }
     private void InitSaveInfo()
     {
