@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RecipeTable", menuName = "ScriptableObjects/RecipeTable", order = 3)]
-public class CraftingRecipe : ScriptableObject
+[CreateAssetMenu(fileName = "RecipeTable", menuName = "ScriptableObjects/RecipeTable", order = 4)]
+public class RecipeTable : ScriptableObject
 {
+    // to contain result of recipes
     [SerializeField]
-    public Item componentOne;
-
-    [SerializeField]
-    public Item componentTwo;
-
-    [SerializeField]
-    public Item result;
-
+    private Recipes[] recipeResults;
 }

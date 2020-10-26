@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using System.Linq; // For finding all gameObjects with name
 
+public enum ItemType
+{
+    INVENTORY,
+    CRAFTING,
+    RESULT,
+}
+
 public class Inventory : MonoBehaviour, ISaveHandler
 {
     [Tooltip("Reference to the master item table")]
@@ -22,22 +29,29 @@ public class Inventory : MonoBehaviour, ISaveHandler
     [SerializeField]
     private List<Item> startingItems;
 
-    // for crafting
-    [Header("Crafting")]
+    [SerializeField]
+    private int startItemCount;
+
+    //for crafting
+
+    [Tooltip("The object which will hold Item Slots as its direct children")]
     [SerializeField]
     private GameObject craftingPanel;
 
+    [Tooltip("List size determines how many slots there will be. Contents will replaced by copies of the first element")]
     [SerializeField]
     private List<ItemSlot> craftingItemSlots;
 
-    // for results
-    // for crafting
-    [Header("Result")]
+    //for result
+
+    [Tooltip("The object which will hold Item Slots as its direct children")]
     [SerializeField]
     private GameObject resultPanel;
 
+    [Tooltip("List size determines how many slots there will be. Contents will replaced by copies of the first element")]
     [SerializeField]
     private List<ItemSlot> resultItemSlots;
+
 
     /// <summary>
     /// Private key used for saving with playerprefs
@@ -53,7 +67,7 @@ public class Inventory : MonoBehaviour, ISaveHandler
         // init starting items for testing
         for (int i = 0; i < startingItems.Count && i < itemSlots.Count; i++)
         {
-            itemSlots[i].SetContents(startingItems[i], 1);
+            itemSlots[i].SetContents(startingItems[i], startItemCount);
         }
     }
 
@@ -68,6 +82,7 @@ public class Inventory : MonoBehaviour, ISaveHandler
             GameObject newObject = Instantiate(itemSlots[0].gameObject, inventoryPanel.transform);
             ItemSlot newSlot = newObject.GetComponent<ItemSlot>();
             itemSlots[i] = newSlot;
+            newSlot.itemType = ItemType.INVENTORY;
         }
 
         foreach (ItemSlot item in itemSlots)
@@ -81,11 +96,7 @@ public class Inventory : MonoBehaviour, ISaveHandler
             GameObject newObject = Instantiate(craftingItemSlots[0].gameObject, craftingPanel.transform);
             ItemSlot newSlot = newObject.GetComponent<ItemSlot>();
             craftingItemSlots[i] = newSlot;
-        }
-
-        foreach (ItemSlot item in craftingItemSlots)
-        {
-            item.onItemUse.AddListener(OnItemUsed);
+            newSlot.itemType = ItemType.CRAFTING;
         }
 
         // init result item slots
@@ -94,11 +105,7 @@ public class Inventory : MonoBehaviour, ISaveHandler
             GameObject newObject = Instantiate(resultItemSlots[0].gameObject, resultPanel.transform);
             ItemSlot newSlot = newObject.GetComponent<ItemSlot>();
             resultItemSlots[i] = newSlot;
-        }
-
-        foreach (ItemSlot item in resultItemSlots)
-        {
-            item.onItemUse.AddListener(OnItemUsed);
+            newSlot.itemType = ItemType.RESULT;
         }
 
     }

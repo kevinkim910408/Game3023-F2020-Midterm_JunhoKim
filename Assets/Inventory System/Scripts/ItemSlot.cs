@@ -16,6 +16,7 @@ public class ItemSlot : MonoBehaviour
     public Item ItemInSlot { get; private set; }
     public int ItemCount { get; private set; }
 
+    public Item tempItem;
 
     // scene references
     [SerializeField]
@@ -23,6 +24,10 @@ public class ItemSlot : MonoBehaviour
 
     [SerializeField]
     private Image itemIcon;
+
+    public GameObject player;
+
+    public ItemType itemType;
 
     private void Update()
     {
@@ -89,15 +94,93 @@ public class ItemSlot : MonoBehaviour
     /// </summary>
     public void UseItem()
     {
-        if(ItemInSlot != null)
+        if(itemType == ItemType.INVENTORY)
         {
-            if(ItemCount >= 1)
+            if (ItemInSlot != null)
             {
-                ItemInSlot.Use();
-                onItemUse.Invoke(ItemInSlot);
-                ItemCount--;
-                b_needsUpdate = true;
+                if (ItemCount >= 1)
+                {
+                    if (player.GetComponent<MousePickUp>().ItemInSlot != null)
+                    {
+                        tempItem = ItemInSlot;
+                        ItemInSlot = player.GetComponent<MousePickUp>().ItemInSlot;
+                        player.GetComponent<MousePickUp>().ItemInSlot = tempItem;
+
+                        if(ItemInSlot == player.GetComponent<MousePickUp>().ItemInSlot)
+                        {
+                            ItemCount += player.GetComponent<MousePickUp>().ItemCount;
+                            player.GetComponent<MousePickUp>().ItemInSlot = null;
+                        }
+
+                    }
+                    else
+                    {
+                        player.GetComponent<MousePickUp>().ItemInSlot = ItemInSlot;
+                        player.GetComponent<MousePickUp>().ItemCount = ItemCount;
+
+                        ClearSlot();
+                    }
+                    b_needsUpdate = true;
+                }
             }
+            else
+            {
+                SetContents(player.GetComponent<MousePickUp>().ItemInSlot, player.GetComponent<MousePickUp>().ItemCount);
+
+                player.GetComponent<MousePickUp>().ItemClear();
+            }
+        }
+        else if (itemType == ItemType.CRAFTING)
+        {
+            if (ItemInSlot != null)
+            {
+                if (ItemCount >= 1)
+                {
+                    if (player.GetComponent<MousePickUp>().ItemInSlot != null)
+                    {
+                        if(ItemInSlot != player.GetComponent<MousePickUp>().ItemInSlot)
+                        {
+                            tempItem = ItemInSlot;
+                            ItemInSlot = player.GetComponent<MousePickUp>().ItemInSlot;
+                            player.GetComponent<MousePickUp>().ItemInSlot = tempItem;
+
+                            int tempCount;
+                            tempCount = ItemCount;
+                            ItemCount = player.GetComponent<MousePickUp>().ItemCount;
+                            player.GetComponent<MousePickUp>().ItemCount = tempCount;
+
+                        }
+                        else
+                        {
+                            player.GetComponent<MousePickUp>().mouseCountDecrease();
+                            ItemCount++;
+                        }
+                    }
+                    else
+                    {
+                        player.GetComponent<MousePickUp>().ItemInSlot = ItemInSlot;
+                        player.GetComponent<MousePickUp>().ItemCount = ItemCount;
+
+                        ClearSlot();
+                    }
+                    b_needsUpdate = true;
+                }
+            }
+            else
+            {
+                if (player.GetComponent<MousePickUp>().ItemInSlot != null)
+                {
+                    SetContents(player.GetComponent<MousePickUp>().ItemInSlot, 1);
+                    player.GetComponent<MousePickUp>().mouseCountDecrease();
+                }
+
+               // SetContents(player.GetComponent<MousePickUp>().ItemInSlot, player.GetComponent<MousePickUp>().ItemCount);
+               // player.GetComponent<MousePickUp>().ItemClear();
+            }
+        }
+        else if(itemType == ItemType.RESULT)
+        {
+
         }
     }
 
@@ -119,6 +202,7 @@ public class ItemSlot : MonoBehaviour
         } else
         {
             itemIcon.gameObject.SetActive(false);
+
         }
 
         b_needsUpdate = false;
