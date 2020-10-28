@@ -12780,6 +12780,14 @@ PrefabInstance:
       propertyPath: masterRecipeItemTable
       value: 
       objectReference: {fileID: 11400000, guid: 8bae8f85b15029c4fafc0da21e05fafa, type: 2}
+    - target: {fileID: 16857277, guid: ecb0877a918e45645a1511232e0f3a42, type: 3}
+      propertyPath: recipeItemTable
+      value: 
+      objectReference: {fileID: 11400000, guid: 8bae8f85b15029c4fafc0da21e05fafa, type: 2}
+    - target: {fileID: 16857277, guid: ecb0877a918e45645a1511232e0f3a42, type: 3}
+      propertyPath: resultItemSlots
+      value: 
+      objectReference: {fileID: 7497750181250445164}
     - target: {fileID: 988644434947816229, guid: ecb0877a918e45645a1511232e0f3a42, type: 3}
       propertyPath: m_AnchorMin.y
       value: 0
@@ -13688,6 +13696,9 @@ MonoBehaviour:
   itemIcon: {fileID: 1414405413388535155}
   player: {fileID: 364459978}
   itemType: 2
+  onSlotChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7497750181333135596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13708,6 +13719,9 @@ MonoBehaviour:
   itemIcon: {fileID: 1414405413459139315}
   player: {fileID: 364459978}
   itemType: 1
+  onSlotChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &7656991840966829000
 MonoBehaviour:
   m_ObjectHideFlags: 0

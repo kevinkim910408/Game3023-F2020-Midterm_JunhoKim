@@ -50,7 +50,14 @@ public class Inventory : MonoBehaviour, ISaveHandler
 
     [Tooltip("List size determines how many slots there will be. Contents will replaced by copies of the first element")]
     [SerializeField]
-    private List<ItemSlot> resultItemSlots;
+    private ItemSlot resultItemSlots;
+
+    // to get recipe
+    [SerializeField]
+    private RecipeTable recipeItemTable;
+
+    // bool
+    private bool isFind;
 
 
     /// <summary>
@@ -97,17 +104,13 @@ public class Inventory : MonoBehaviour, ISaveHandler
             ItemSlot newSlot = newObject.GetComponent<ItemSlot>();
             craftingItemSlots[i] = newSlot;
             newSlot.itemType = ItemType.CRAFTING;
-        }
 
-        // init result item slots
-        for (int i = 1; i < resultItemSlots.Count; i++)
-        {
-            GameObject newObject = Instantiate(resultItemSlots[0].gameObject, resultPanel.transform);
-            ItemSlot newSlot = newObject.GetComponent<ItemSlot>();
-            resultItemSlots[i] = newSlot;
-            newSlot.itemType = ItemType.RESULT;
+            // decoupling - listener
+            craftingItemSlots[i].onSlotChanged.AddListener(CheckCrafting);
         }
+        craftingItemSlots[0].onSlotChanged.AddListener(CheckCrafting);
 
+        resultItemSlots.onSlotEmpty.AddListener(ClearResultSlot);
     }
     private void InitSaveInfo()
     {
@@ -205,6 +208,44 @@ public class Inventory : MonoBehaviour, ISaveHandler
             {
                 itemSlots[i].SetContents(masterItemTable.GetItem(id), count);
             }
+        }
+    }
+
+    public void CheckCrafting()
+    {
+       // Debug.Log("Event");
+
+        for (int i = 0; i < recipeItemTable.recipeResults.Count; ++i)
+        {
+            for (int j = 0; j < craftingItemSlots.Count; ++j)
+            {
+                if (recipeItemTable.recipeResults[i].components[j] != craftingItemSlots[j].ItemInSlot)
+                {
+                    resultItemSlots.ClearSlot();
+                    isFind = false;
+                    break;
+                }
+
+                if(j == 8)
+                {
+                    
+                    isFind = true;
+                    break;
+                }
+            }
+            if (isFind == true)
+            {
+                resultItemSlots.SetContents(recipeItemTable.recipeResults[i].result, 1);
+                break;
+            }
+        }
+    }
+
+    public void ClearResultSlot()
+    {
+        for(int i = 0; i < craftingItemSlots.Count; ++i)
+        {
+            craftingItemSlots[i].ClearSlot();
         }
     }
 }

@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 83002c8a729926b41ac60d89b6b0d589, type: 3}
-  m_Name: Recipes_BluePotion
+  m_Name: Recipes_GreenPotion
   m_EditorClassIdentifier: 
   components:
-  - {fileID: 11400000, guid: 1cb0a04669b996e41aadf11083d5b817, type: 2}
-  - {fileID: 11400000, guid: 1cb0a04669b996e41aadf11083d5b817, type: 2}
-  - {fileID: 11400000, guid: 1cb0a04669b996e41aadf11083d5b817, type: 2}
+  - {fileID: 11400000, guid: 2fdbc09ebc3bbb04c83ca08367353851, type: 2}
+  - {fileID: 11400000, guid: 2fdbc09ebc3bbb04c83ca08367353851, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  result: {fileID: 11400000, guid: 7ca493bf2fa31724592cf92924671357, type: 2}
+  - {fileID: 0}
+  result: {fileID: 11400000, guid: 9c03eb5fd4719d44ba7a51b1535d8ce4, type: 2}

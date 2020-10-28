@@ -22,9 +22,9 @@ public class MousePickUp : MonoBehaviour
     {
         if (ItemInSlot != null)
         {
-            itemCountText.text = ItemCount.ToString();
-            itemIcon.sprite = ItemInSlot.Icon;
-            itemIcon.gameObject.SetActive(true);
+                itemCountText.text = ItemCount.ToString();
+                itemIcon.sprite = ItemInSlot.Icon;
+                itemIcon.gameObject.SetActive(true);
 
             // item follows mouse cursor
             Vector2 movePosition;

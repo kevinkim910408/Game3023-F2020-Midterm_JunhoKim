@@ -6,9 +6,9 @@ using UnityEngine;
 public class Recipes : ScriptableObject
 {
     [SerializeField]
-    private Item[] components;
+    public Item[] components;
 
     [SerializeField]
-    private Item result;
+    public Item result;
 
 }

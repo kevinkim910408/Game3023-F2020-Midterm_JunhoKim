@@ -29,6 +29,10 @@ public class ItemSlot : MonoBehaviour
 
     public ItemType itemType;
 
+    // Invoke
+    public UnityEvent onSlotChanged;
+    public UnityEvent onSlotEmpty;
+
     private void Update()
     {
         if(b_needsUpdate)
@@ -177,10 +181,41 @@ public class ItemSlot : MonoBehaviour
                // SetContents(player.GetComponent<MousePickUp>().ItemInSlot, player.GetComponent<MousePickUp>().ItemCount);
                // player.GetComponent<MousePickUp>().ItemClear();
             }
-        }
+
+
+            // decoupling
+            if (onSlotChanged != null) // if there is a listener
+            {
+                onSlotChanged.Invoke();
+            }
+
+
+        } // crafting
+
+        // result
         else if(itemType == ItemType.RESULT)
         {
+            if (ItemInSlot != null)
+            {
+                if (ItemCount >= 1)
+                {
+                    // no items on mouse cursor
+                    if (player.GetComponent<MousePickUp>().ItemInSlot == null)
+                    {
+                        Debug.Log("Result");
 
+                        player.GetComponent<MousePickUp>().ItemInSlot = ItemInSlot;
+                        player.GetComponent<MousePickUp>().ItemCount = ItemCount;
+
+                        ClearSlot();
+
+                        //decoupling
+                        onSlotEmpty.Invoke();
+
+                    }
+                    b_needsUpdate = true;
+                }
+            }
         }
     }
 

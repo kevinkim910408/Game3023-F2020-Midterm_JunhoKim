@@ -7,5 +7,5 @@ public class RecipeTable : ScriptableObject
 {
     // to contain result of recipes
     [SerializeField]
-    private Recipes[] recipeResults;
+    public List<Recipes> recipeResults;
 }
